@@ -80,6 +80,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .todo {
+  display: flex;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -99,4 +100,31 @@ h1, h2, h3, h4, h5, h6 {
     padding: 60px 20px;
   }
 }
- /*calc(100% - 120px) */
+
+/*calc(100% - 120px) */
+.button {
+  background: #4DD599;
+  border-radius: 4px;
+  color: #FFFFFF;
+  border: 0;
+  padding:10px 20px;
+  &:hover {
+    background: darken(#4DD599, 6%);
+  }
+  &:active {
+    background: darken(#4DD599, 10%);
+  }
+}
+
+.field {
+  background: #FFFFFF;
+  border: 1px solid #EFEFEF;
+  box-sizing: border-box;
+  border-radius: 4px;
+  padding: 8px 12px;
+  width: 100%;
+
+  &:focus {
+    border-color: #dbdbdb;
+  }
+}
