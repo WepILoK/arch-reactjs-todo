@@ -4,7 +4,7 @@
   border: 0;
 }
 
-*, *:before, *:after {
+/**, *:before, *:after {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -69,7 +69,7 @@ img {
 h1, h2, h3, h4, h5, h6 {
   font-size: inherit;
   font-weight: 400;
-}
+}*/
 
 /*Зануление стилей*/
 
@@ -95,11 +95,18 @@ h1, h2, h3, h4, h5, h6 {
   &__sidebar {
     background-color: #F4F6F8;
     width: 200px;
-    height: 100%;
+    height: calc(100% - 120px);
     border-right: 1px solid #F1F1F1;
     padding: 60px 20px;
   }
+
+  &__tasks {
+    flex: 1;
+    padding: 60px;
+
+  }
 }
+
 
 /*calc(100% - 120px) */
 .button {
@@ -107,10 +114,12 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 4px;
   color: #FFFFFF;
   border: 0;
-  padding:10px 20px;
+  padding: 10px 20px;
+
   &:hover {
     background: darken(#4DD599, 6%);
   }
+
   &:active {
     background: darken(#4DD599, 10%);
   }
