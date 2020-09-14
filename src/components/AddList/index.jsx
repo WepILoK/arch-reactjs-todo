@@ -1,33 +1,51 @@
-import React, {useState} from "react";
-
+import React, {useEffect, useState} from "react";
+import * as axios from "axios";
 
 import addSvg from "../../assets/img/add.svg";
 import closeSvg from "../../assets/img/close.svg";
 
-import {List} from "../List";
-import {Badge} from "../Badge";
+import {List, Badge} from "../../components"
 
 import "./addList.scss";
 
 export const AddList = ({colors, onAdd}) => {
     const [visiblePopup, setVisiblePopup] = useState(false);
-    const [selectedColor, setSelectedColor] = useState(colors[0].id);
+    const [selectedColor, setSelectColor] = useState(3);
+    const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
+
+    useEffect(()=>{
+        if (Array.isArray(colors)) {
+            setSelectColor(colors[0].id);
+        }
+    }, [colors])
 
     const onClose = () => {
         setVisiblePopup(!visiblePopup);
         setInputValue("");
-        setSelectedColor(colors[0].id);
+        setSelectColor(colors[0].id);
     };
 
     const addList = () => {
         if (!inputValue) {
-            alert("Введите название списка");
+            alert('Введите название списка');
             return;
         }
-        const color = colors.filter(c => c.id === selectedColor)[0].name;
-        onAdd({id: Math.random(), name: inputValue, color });
-        onClose()
+
+        setIsLoading(true);
+        axios.post('http://localhost:3001/lists', {
+                name: inputValue,
+                colorId: selectedColor
+            })
+            .then(({ data }) => {
+                const color = colors.filter(c => c.id === selectedColor)[0].name;
+                const listObj = { ...data, color: { name: color } };
+                onAdd(listObj);
+                onClose();
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
 
@@ -49,18 +67,18 @@ export const AddList = ({colors, onAdd}) => {
                        value={inputValue} onChange={e => setInputValue(e.target.value)}/>
 
                 <div className="add-list__popup-colors">
-                    <ul>
-                        {colors.map((color) =>
+                        {colors.map(color =>
                             <Badge
-                                onClick={() => setSelectedColor(color.id)}
+                                onClick={() => setSelectColor(color.id)}
                                 key={color.id}
                                 color={color.name}
                                 className={selectedColor === color.id && "active"}
                             />
                         )}
-                    </ul>
                 </div>
-                <button onClick={addList} className="button">Добавить</button>
+                <button onClick={addList} className="button">
+                    {isLoading ? 'Добавление...' : 'Добавить'}
+                </button>
             </div>}
 
         </div>

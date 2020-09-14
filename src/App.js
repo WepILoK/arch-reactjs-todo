@@ -1,20 +1,26 @@
-import React, {useState} from 'react';
-import {List} from "./components/List/";
+import React, {useEffect, useState} from 'react';
 
 import listSvg from "./assets/img/list.svg";
-import {AddList} from "./components/AddList";
-import DB from "./assets/db.json"
-import {Tasks} from "./components/Tasks";
+
+import {List, AddList, Tasks} from "./components"
+import * as axios from "axios";
 
 function App() {
-    const [lists, setLists] = useState(DB.lists.map(items => {
-        items.color = DB.colors.filter(color => color.id === items.colorId)[0].name
-        return items
-    }));
+    const [lists, setLists] = useState(null);
+    const [colors, setColors] = useState(null);
+
+    useEffect(() => {
+        axios.get('http://localhost:3001/lists?_expand=color&_embed=tasks').then(({ data }) => {
+                setLists(data);
+            });
+        axios.get('http://localhost:3001/colors').then(({ data }) => {
+            setColors(data);
+        });
+    }, []);
 
     const onAddList = obj => {
         const newLists = [...lists, obj];
-      setLists(newLists);
+        setLists(newLists);
     };
 
     return (
@@ -29,11 +35,18 @@ function App() {
                 ]}
                       isRemovebel
                 />
-                <List items={lists} isRemovable onRemove={(list)=>console.log(list)}/>
-                <AddList onAdd={onAddList} colors={DB.colors}/>
+                {lists
+                    ? <List items={lists}
+                            isRemovable
+                            onRemove={id => {
+                                const newLists = lists.filter(item => item.id !== id);
+                                setLists(newLists);
+                            }}/>
+                    : <div>Загрузка...</div>}
+                <AddList onAdd={onAddList} colors={colors}/>
             </div>
             <div className="todo__tasks">
-                <Tasks/>
+                {lists && <Tasks list={lists[1]}/>}
             </div>
         </div>
     );
