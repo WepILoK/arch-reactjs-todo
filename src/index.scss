@@ -115,6 +115,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #FFFFFF;
   border: 0;
   padding: 10px 20px;
+  font-size: 14px;
 
   &:hover {
     background: darken(#4DD599, 6%);
@@ -123,6 +124,24 @@ h1, h2, h3, h4, h5, h6 {
   &:active {
     background: darken(#4DD599, 10%);
   }
+
+  &:disabled {
+    background: #d8d8d8;
+  }
+
+  &--grey {
+    background: #F4F6F8;
+    color: #444444;
+
+    &:hover {
+      background: darken(#F4F6F8, 3%);
+    }
+
+    &:active {
+      background: darken(#F4F6F8, 6%);
+    }
+  }
+
 }
 
 .field {
@@ -132,6 +151,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 4px;
   padding: 8px 12px;
   width: 100%;
+  font-size: 16px;
 
   &:focus {
     border-color: #dbdbdb;

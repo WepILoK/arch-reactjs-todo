@@ -14,7 +14,7 @@ export const AddList = ({colors, onAdd}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
 
-    useEffect(()=>{
+    useEffect(() => {
         if (Array.isArray(colors)) {
             setSelectColor(colors[0].id);
         }
@@ -34,18 +34,18 @@ export const AddList = ({colors, onAdd}) => {
 
         setIsLoading(true);
         axios.post('http://localhost:3001/lists', {
-                name: inputValue,
-                colorId: selectedColor
-            })
-            .then(({ data }) => {
-                const color = colors.filter(c => c.id === selectedColor)[0].name;
-                const listObj = { ...data, color: { name: color } };
-                onAdd(listObj);
-                onClose();
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+            name: inputValue,
+            colorId: selectedColor
+        }).then(({data}) => {
+            const color = colors.filter(c => c.id === selectedColor)[0].name;
+            const listObj = {...data, color: {name: color}};
+            onAdd(listObj);
+            onClose();
+        }).catch(() => {
+            alert("Ошибка при добавлении списка")
+        }).finally(() => {
+            setIsLoading(false);
+        });
     };
 
 
@@ -67,14 +67,14 @@ export const AddList = ({colors, onAdd}) => {
                        value={inputValue} onChange={e => setInputValue(e.target.value)}/>
 
                 <div className="add-list__popup-colors">
-                        {colors.map(color =>
-                            <Badge
-                                onClick={() => setSelectColor(color.id)}
-                                key={color.id}
-                                color={color.name}
-                                className={selectedColor === color.id && "active"}
-                            />
-                        )}
+                    {colors.map(color =>
+                        <Badge
+                            onClick={() => setSelectColor(color.id)}
+                            key={color.id}
+                            color={color.name}
+                            className={selectedColor === color.id && "active"}
+                        />
+                    )}
                 </div>
                 <button onClick={addList} className="button">
                     {isLoading ? 'Добавление...' : 'Добавить'}
